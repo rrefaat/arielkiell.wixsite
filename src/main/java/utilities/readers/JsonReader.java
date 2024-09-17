@@ -1,15 +1,15 @@
 package utilities.readers;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.openqa.selenium.json.JsonException;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.openqa.selenium.json.JsonException;
 
 public class JsonReader {
     JSONObject jsonObject;

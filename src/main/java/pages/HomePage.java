@@ -1,19 +1,20 @@
 package pages;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
-public class HomePage {
+
+
+public class HomePage extends BaseClass{
     WebDriver driver;
 
-    @FindBy(id="comp-iy4cwgmq1label")
-    WebElement shopLink;
+    public By shopLink = By.id("comp-iy4cwgmq1label");
 
     public HomePage(WebDriver driver) {
         this.driver = driver;
     }
 
     public void goToShop() {
-        shopLink.click();
+        clickOnElement(driver, shopLink);
     }
+
 }

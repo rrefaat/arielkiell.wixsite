@@ -1,19 +1,18 @@
 package pages;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
-public class ShopPage {
+public class ShopPage extends BaseClass{
     WebDriver driver;
 
-    @FindBy(xpath = "//div[contains(@class, 'INg0tB FbHYze') and contains(text(),'Best Seller')]")
-    WebElement bestSellerProduct;
+    public By bestSellerProduct = By.xpath("//div[@data-hook='RibbonDataHook.RibbonOnImage' and contains(text(),'Best Seller')]/ancestor::a[@data-hook='product-item-container']");
 
     public ShopPage(WebDriver driver) {
         this.driver = driver;
     }
 
-    public void selectBestSeller() {
-        bestSellerProduct.click();
+    public void selectBestSeller(){
+        scrollToFindElement(driver, bestSellerProduct);
+        clickOnElement(driver, bestSellerProduct);
     }
 }

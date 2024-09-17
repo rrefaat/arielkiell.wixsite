@@ -12,55 +12,45 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 public class WebBrowsers {
 
     public static WebDriver chooseBrowserDriver(String browserName, boolean headless) {
-        //using chromeoption
         switch (browserName) {
             case "Chrome": {
                 WebDriverManager.chromedriver().clearDriverCache().setup();
-                return new ChromeDriver((ChromeOptions) getChromeOptions(browserName,headless));
+                ChromeOptions chromeOptions = getChromeOptions(headless);  // No need for casting
+                return new ChromeDriver(chromeOptions);
             }
             case "Firefox": {
                 WebDriverManager.firefoxdriver().clearDriverCache().setup();
-                    return new FirefoxDriver((FirefoxOptions) getChromeOptions(browserName,headless));
+                FirefoxOptions firefoxOptions = getFirefoxOptions(headless);  // No need for casting
+                return new FirefoxDriver(firefoxOptions);
             }
             case "Edge": {
                 WebDriverManager.edgedriver().setup();
-                EdgeDriver edgeDriver = new EdgeDriver();
-                return edgeDriver;
+                return new EdgeDriver();
             }
             default:
                 return null;
         }
-
     }
 
-
-    private static Object getChromeOptions(String option,boolean headless) {
-
-        switch (option) {
-            case "Chrome": {
-                ChromeOptions chromeOptions = new ChromeOptions();
-                //chromeOptions.addArguments(new String[]{"--incognito"});
-                chromeOptions.addArguments("--remote-allow-origins=*");
-                chromeOptions.addArguments("disable-infobars");
-                chromeOptions.addArguments("--lang=en");
-                chromeOptions.addArguments("--no-sandbox");
-                chromeOptions.addArguments("--disable-dev-shm-usage");
-                chromeOptions.addArguments("--start-maximized");
-                chromeOptions.addArguments("--disable-popup-blocking");
-//              for minimize browser scale
-//              chromeOptions.addArguments("force-device-scale-factor=0.90");
-//              chromeOptions.addArguments("high-dpi-support=0.95");
-                return chromeOptions;
-            }
-            case "Firefox": {
-                FirefoxOptions options1 = new FirefoxOptions();
-                options1.setHeadless(headless);
-                return options1;
-            }
-
-            default:
-                return null;
+    private static ChromeOptions getChromeOptions(boolean headless) {
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--remote-allow-origins=*");
+        chromeOptions.addArguments("disable-infobars");
+        chromeOptions.addArguments("--lang=en");
+        chromeOptions.addArguments("--no-sandbox");
+        chromeOptions.addArguments("--disable-dev-shm-usage");
+        chromeOptions.addArguments("--start-maximized");
+        chromeOptions.addArguments("--disable-popup-blocking");
+        if (headless) {
+            chromeOptions.addArguments("--headless");  // If running in headless mode
         }
+        return chromeOptions;
+    }
+
+    private static FirefoxOptions getFirefoxOptions(boolean headless) {
+        FirefoxOptions firefoxOptions = new FirefoxOptions();
+        firefoxOptions.setHeadless(headless);  // Enable headless mode if requested
+        return firefoxOptions;
     }
 
     public static void staticmaximizeWindow(WebDriver driver) {
@@ -70,5 +60,4 @@ public class WebBrowsers {
     public static void quitWindow(WebDriver driver) {
         driver.quit();
     }
-
 }
