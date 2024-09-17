@@ -15,3 +15,47 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+.allure
+*.json
+# Maven target directory
+target/
+
+# Maven build directory
+build/
+
+# VS Code specific files
+.vscode/
+
+# Environment variable files
+.env
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Compiled class files
+*.class
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+
+# Test output
+*.out
+*.test
+*.xml
+*.png
+
+
+# Ignore other OS generated files
+*.~lock.*
+*.swp
+*.swo
+
+# Ignore miscellaneous
+*.bak
+*.tmp
+*.backup
