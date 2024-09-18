@@ -24,10 +24,18 @@ public class CartPage extends BaseClass {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
+    // Assert that the cart page is displayed correctly
+    public void assertCartPageLoaded() {
+        Assert.assertTrue(driver.getTitle().contains("Cart"), "The Cart Page did not load correctly.");
+    }
+
     public void addToCart() {
         clickOnElement(driver, addToCartButton);
+        // Switch to iframe that contains the cart popup
         wait.until(
                 ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.xpath("//iframe[contains(@name, 'tpapopup')]")));
+        Assert.assertTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(viewCartButton)).isDisplayed(), 
+                "View Cart button is not displayed.");
     }
 
     public void viewCart() {
@@ -37,26 +45,32 @@ public class CartPage extends BaseClass {
     public void proceedToCheckout() {
         driver.switchTo().defaultContent();
         wait.until(ExpectedConditions.elementToBeClickable(checkoutButton));
+        Assert.assertTrue(driver.findElement(checkoutButton).isDisplayed(), 
+                "Checkout button is not visible.");
         clickOnElement(driver, checkoutButton);
     }
 
+    // Verify total price against expected total
     public void verifyTotalPrice() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(itemPrice));
         String priceText = getElemetText(driver, itemPrice);
         String totalPriceText = getElemetText(driver, totalPrice);
-        // Remove any non-numeric characters (currency symbols, commas, etc.)
+        
+        // Clean the text to remove currency symbols and commas
         String cleanedPrice = priceText.replaceAll("[^\\d.]", "");
         String cleanedTotalPrice = totalPriceText.replaceAll("[^\\d.]", "");
+        
         try {
-            float price = Float.parseFloat(cleanedPrice); // Convert the cleaned price text to an integer
+            float price = Float.parseFloat(cleanedPrice); // Parse the cleaned price text into a float
             String itemQuantityText = driver.findElement(itemQuantity).getAttribute("value");
-            int quantity = Integer.parseInt(itemQuantityText); // Convert quantity to an integer
-            float expectedTotalPrice = price * quantity; // Calculate the expected total price
-            System.out.println("expectedTotalPrice: " + expectedTotalPrice);
-            // Convert total price to float after cleaning
-            float total = Float.parseFloat(cleanedTotalPrice);
-            // Assert that the actual total matches the expected total
-            Assert.assertEquals(total, expectedTotalPrice, "Price does not match expected total.");
+            int quantity = Integer.parseInt(itemQuantityText); // Parse quantity to an integer
+            float expectedTotalPrice = price * quantity; // Calculate expected total price
+            
+            System.out.println("Expected Total Price: " + expectedTotalPrice);
+            
+            float total = Float.parseFloat(cleanedTotalPrice); // Parse total price text into a float
+            // Assert that the total price matches the expected total
+            Assert.assertEquals(total, expectedTotalPrice, "Total price does not match the expected value.");
         } catch (NumberFormatException e) {
             e.printStackTrace();
             Assert.fail("Failed to parse price or total price into a number.");
